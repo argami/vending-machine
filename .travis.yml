@@ -1,4 +1,6 @@
 language: php
 php:
   - 7.4
+install:
+  - composer install
 scripts: vendor/bin/atoum -d tests
