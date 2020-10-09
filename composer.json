@@ -1,0 +1,11 @@
+{
+    "name": "argami/vending-machine",
+    "description": "VendingMachine Kata",
+    "authors": [
+        {
+            "name": "Gamaliel Toro",
+            "email": "argami@gmail.com"
+        }
+    ],
+    "require": {}
+}
