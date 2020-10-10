@@ -44,4 +44,12 @@ class CoinManager extends atoum
         // greedyness
         $this->array($coinManager->getChange(0.08))->isEqualTo([0.05]);
     }
+
+    public function testCoinCountShouldDropToZero()
+    {
+        $coin = ['0.05' => ['value' => 0.05, 'count' => 2]];
+        $coinManager = $this->newTestedInstance($coin);
+        $this->array($coinManager->getChange(0.10))->isEqualTo([0.05, 0.05]);
+        $this->boolean($coinManager->any(0.05))->isFalse();
+    }
 }

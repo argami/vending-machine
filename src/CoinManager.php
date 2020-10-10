@@ -28,9 +28,10 @@ class CoinManager
     {
         $change = [];
         $remaining = $changeAmount;
-        foreach ($this->coinDrawers as $key => $coin) {
+        foreach ($this->coinDrawers as $key => &$coin) {
             if ($remaining >= $coin['value'] && $coin['count'] > 0) {
                 $ncoins = (int)($remaining / $coin['value']);
+                $coin['count'] -= $ncoins;
                 $remaining -= ($ncoins * $coin['value']);
                 array_push($change, ...array_fill(0, $ncoins, $coin['value']));
             }
