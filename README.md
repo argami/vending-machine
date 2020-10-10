@@ -8,6 +8,8 @@ Lets start with an simple version implementation and grow from it.
 
 # Notes:
 
+I think the code and git log will give a lot of insight of why/how i did X in this project. But to be sure i add some comments that might be of help:
+
 ## Some assumptions made:
 
 - Like in a real vending machine if the coin inserted isn't valid, and was able to put it inside, it will be returned immediately
@@ -18,7 +20,8 @@ Lets start with an simple version implementation and grow from it.
 
 ## Things to take in consideration
 
-- Normally in large code bases i work using the git-flow approach in small repos without more people than me avoid the overhead of using it, that is why in most of the development of this code i didn't use it
+- Normally in large code bases i work using the git-flow approach but for small repos/projects, working alone and in the begin of the project i dont use it to remove the overhead of it, that is why in most of this project i didn't use it.
+- I have use PHPUnit for some time, but i dont really like the way the testing API is done, that is why i use atoum, which i found more expresive, and easy to understand at first look
 
 
 # TODO
@@ -29,7 +32,9 @@ Setup a VendingMachine class with the basic funcionality I/O (Simple version to 
 - [x] Coin Validation
 - [x] Return money
 - [ ] Sell Items 
-- [ ] Need to improve coin name, using value is fragile 
+- [ ] Need to improve coin name, using value (in float format) is fragile
+- [ ] Coins aren't infinite 
+- [ ] "CRUD" for items (coins, products)
 
 
 - [ ] Cleaning test
