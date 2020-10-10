@@ -8,17 +8,17 @@ class CoinManager extends atoum
 {
     public function testReturnTrueIfCoinIsValidDenomination()
     {
-        $vm = $this->newTestedInstance;
+        $coinManager = $this->newTestedInstance;
 
-        $this->boolean($vm->isValid(0.10))->isTrue();
-        $this->boolean($vm->isValid(1.0))->isTrue();
-        $this->boolean($vm->isValid(0.05))->isTrue();
-        $this->boolean($vm->isValid(0.25))->isTrue();
+        $this->boolean($coinManager->isValid(0.10))->isTrue();
+        $this->boolean($coinManager->isValid(1.0))->isTrue();
+        $this->boolean($coinManager->isValid(0.05))->isTrue();
+        $this->boolean($coinManager->isValid(0.25))->isTrue();
     }
 
     public function testReturnFalseIfCoinIsInvalidDenomination()
     {
-        $vm = $this->newTestedInstance;
-        $this->boolean($vm->isValid(2))->isFalse();
+        $coinManager = $this->newTestedInstance;
+        $this->boolean($coinManager->isValid(2))->isFalse();
     }
 }
