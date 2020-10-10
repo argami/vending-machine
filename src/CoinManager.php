@@ -20,9 +20,6 @@ class CoinManager
         return array_key_exists((string)$coin, $this->coinDrawers);
     }
 
-    /*
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
     public function getChange(float $changeAmount):array
     {
         $change = [];
