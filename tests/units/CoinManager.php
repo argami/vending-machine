@@ -31,7 +31,12 @@ class CoinManager extends atoum
 
     public function testReturnNearChangeForSpecificAmount()
     {
-        $coinManager = $this->newTestedInstance;
+        $coins = ['0.05' => ['value' => 0.05, 'count' => 2],
+                  '0.1' => ['value' => 0.1, 'count' => 1],
+                  '0.25' => ['value' => 0.25, 'count' => 2],
+                  '1' => ['value' => 1.0, 'count' => 5]];
+
+        $coinManager = $this->newTestedInstance($coins);
         $this->array($coinManager->getChange(0.05))->isEqualTo([0.05]);
         $this->array($coinManager->getChange(0.1))->isEqualTo([0.1]);
         $this->array($coinManager->getChange(5))->isEqualTo([1, 1, 1, 1, 1]);
