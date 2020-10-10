@@ -31,10 +31,10 @@ class CoinManager extends atoum
 
     public function testReturnNearChangeForSpecificAmount()
     {
-        $coins = ['0.05' => ['value' => 0.05, 'count' => 2],
-                  '0.1' => ['value' => 0.1, 'count' => 1],
-                  '0.25' => ['value' => 0.25, 'count' => 2],
-                  '1' => ['value' => 1.0, 'count' => 5]];
+        $coins = ['0.05' => ['value' => 5, 'count' => 2],
+                  '0.1' => ['value' => 10, 'count' => 1],
+                  '0.25' => ['value' => 25, 'count' => 2],
+                  '1' => ['value' => 100, 'count' => 5]];
 
         $coinManager = $this->newTestedInstance($coins);
         $this->array($coinManager->getChange(0.05))->isEqualTo([0.05]);
@@ -47,10 +47,28 @@ class CoinManager extends atoum
 
     public function testCoinCountShouldDropToZero()
     {
-        $coin = ['0.05' => ['value' => 0.05, 'count' => 2]];
+        $coin = ['0.05' => ['value' => 5, 'count' => 2]];
         $coinManager = $this->newTestedInstance($coin);
         $this->array($coinManager->getChange(0.15))->isEqualTo([0.05, 0.05]);
         $this->boolean($coinManager->any(0.05))->isFalse();
         $this->array($coinManager->getCoin(0.05))->integer['count']->isEqualTo(0);
+    }
+
+    public function testTestingChangeAndCoinStock()
+    {
+        $coins = ['0.05' => ['value' => 5, 'count' => 10],
+            '0.1' => ['value' => 10, 'count' => 5],
+            '0.25' => ['value' => 25, 'count' => 4],
+            '1' => ['value' => 100, 'count' => 5]];
+
+        $coinManager = $this->newTestedInstance($coins);
+        $this->array($coinManager->getChange(0.50))->isEqualTo([0.25, 0.25]);
+        $this->array($coinManager->getChange(0.35))->isEqualTo([0.25, 0.10]);
+        $this->array($coinManager->getChange(3.35))->isEqualTo([1, 1, 1, 0.25, 0.10]);
+        $this->array($coinManager->getChange(0.25))->isEqualTo([0.10, 0.10, 0.05]);
+        $this->array($coinManager->getChange(2.35))->isEqualTo([1, 1, 0.10, 0.05, 0.05, 0.05, 0.05, 0.05]);
+        # greedy b. not returning all the money
+        $this->array($coinManager->getChange(1))->isEqualTo([0.05, 0.05, 0.05, 0.05]);
+        $this->array($coinManager->getChange(1))->isEqualTo([]);
     }
 }
