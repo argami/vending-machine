@@ -19,5 +19,5 @@ Setup a VendingMachine class with the basic funcionality I/O (Simple version to 
 
 - [x] Insert Coin
 - [x] Coin Validation
-- [ ] Return money
+- [x] Return money
 - [ ] Sell Items 
