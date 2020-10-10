@@ -30,7 +30,10 @@ class CoinManager
         $remaining = $changeAmount;
         foreach ($this->coinDrawers as $key => &$coin) {
             if ($remaining >= $coin['value'] && $coin['count'] > 0) {
-                $ncoins = (int)($remaining / $coin['value']);
+                $ncoins = (int)(($remaining * 100) / ($coin['value'] * 100));
+                if ($ncoins > $coin['count']) {
+                    $ncoins = $coin['count'];
+                }
                 $coin['count'] -= $ncoins;
                 $remaining -= ($ncoins * $coin['value']);
                 array_push($change, ...array_fill(0, $ncoins, $coin['value']));
@@ -46,6 +49,11 @@ class CoinManager
             return $this->coinDrawers[(string)$coin]['count'] > 0;
         }
         return false;
+    }
+
+    public function getCoin(float $coin)
+    {
+        return $this->coinDrawers[(string)$coin];
     }
 
     private function sort()

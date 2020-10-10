@@ -49,7 +49,8 @@ class CoinManager extends atoum
     {
         $coin = ['0.05' => ['value' => 0.05, 'count' => 2]];
         $coinManager = $this->newTestedInstance($coin);
-        $this->array($coinManager->getChange(0.10))->isEqualTo([0.05, 0.05]);
+        $this->array($coinManager->getChange(0.15))->isEqualTo([0.05, 0.05]);
         $this->boolean($coinManager->any(0.05))->isFalse();
+        $this->array($coinManager->getCoin(0.05))->integer['count']->isEqualTo(0);
     }
 }
