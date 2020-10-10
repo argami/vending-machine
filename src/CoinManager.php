@@ -4,7 +4,7 @@ namespace vending;
 
 class CoinManager
 {
-    private $coin_drawers = ['0.05' => ['value' => 0.05, 'count' => 0],
+    private $coinDrawers = ['0.05' => ['value' => 0.05, 'count' => 0],
                              '0.1' => ['value' => 0.1, 'count' => 0],
                              '0.25' => ['value' => 0.25, 'count' => 0],
                              '1' => ['value' => 1.0, 'count' => 0]];
@@ -20,11 +20,14 @@ class CoinManager
         return array_key_exists((string)$coin, $this->coin_drawers);
     }
 
+    /*
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function getChange(float $changeAmount):array
     {
         $change = [];
         $remaining = $changeAmount;
-        foreach ($this->coin_drawers as $key => $coin) {
+        foreach ($this->coinDrawers as $key => $coin) {
             if ($remaining >= $coin['value']) {
                 $ncoins = (int)($remaining / $coin['value']);
                 $remaining -= ($ncoins * $coin['value']);
@@ -37,8 +40,8 @@ class CoinManager
 
     private function sort()
     {
-        uasort($this->coin_drawers, function ($a, $b) {
-            return $b['value'] <=> $a['value'];
+        uasort($this->coinDrawers, function ($left, $right) {
+            return $right['value'] <=> $left['value'];
         });
     }
 }
