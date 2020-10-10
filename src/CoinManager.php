@@ -17,7 +17,7 @@ class CoinManager
     
     public function isValid(float $coin):bool
     {
-        return array_key_exists((string)$coin, $this->coin_drawers);
+        return array_key_exists((string)$coin, $this->coinDrawers);
     }
 
     /*
