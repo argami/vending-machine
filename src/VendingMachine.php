@@ -41,6 +41,13 @@ class VendingMachine
 
     public function sellProduct(string $productCode) : array
     {
-        return [$productCode, []];
+        $changeAmount = $this->getInsertedAmount() - $this->products[strtoupper($productCode)];
+        print_r($changeAmount);
+        if ($changeAmount >= 0) {
+            $change = $this->coinManager->getChange($changeAmount);
+            // get product
+            return [$productCode, $change];
+        }
+        return [];
     }
 }

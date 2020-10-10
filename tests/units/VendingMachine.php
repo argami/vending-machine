@@ -59,4 +59,27 @@ class VendingMachine extends atoum
 
         $this->array($vendingMachine->sellProduct('JUICE'))->isEqualTo(['JUICE', []]);
     }
+
+    public function testSellProductReturnProductAndChange()
+    {
+        $coins = ['0.05' => ['value' => 5, 'count' => 2],
+            '0.1' => ['value' => 10, 'count' => 1],
+            '0.25' => ['value' => 25, 'count' => 2],
+            '1' => ['value' => 100, 'count' => 5]];
+
+        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager($coins));
+        $vendingMachine->insertCoin(1);
+        $vendingMachine->insertCoin(1);
+
+        $this->array($vendingMachine->sellProduct('SODA'))->isEqualTo(['SODA', [0.25, 0.25]]);
+    }
+
+    public function testSellProductReturnProductAndNoChange()
+    {
+        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager());
+        $vendingMachine->insertCoin(1);
+        $vendingMachine->insertCoin(1);
+
+        $this->array($vendingMachine->sellProduct('SODA'))->isEqualTo(['SODA', []]);
+    }
 }
