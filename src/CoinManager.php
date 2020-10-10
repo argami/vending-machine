@@ -2,16 +2,20 @@
 
 namespace vending;
 
-class CoinManager
-{
-    private $coinDrawers = ['0.05' => ['value' => 0.05, 'count' => 0],
+const DEFAULT_COINS = ['0.05' => ['value' => 0.05, 'count' => 0],
                              '0.1' => ['value' => 0.1, 'count' => 0],
                              '0.25' => ['value' => 0.25, 'count' => 0],
                              '1' => ['value' => 1.0, 'count' => 0]];
 
+class CoinManager
+{
+    private $coinDrawers = null;
+
     
-    public function __construct()
+    public function __construct(array $coinValuesCounts = [])
     {
+        $this->coinDrawers = empty($coinValuesCounts) ? DEFAULT_COINS : $coinValuesCounts;
+        
         $this->sort();
     }
     
@@ -33,6 +37,14 @@ class CoinManager
         }
         
         return $change;
+    }
+
+    public function any(float $coin): bool
+    {
+        if ($this->isValid($coin)) {
+            return $this->coinDrawers[(string)$coin]['count'] > 0;
+        }
+        return false;
     }
 
     private function sort()

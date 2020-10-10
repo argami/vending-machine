@@ -23,11 +23,11 @@ class CoinManager extends atoum
     }
 
 
-    // public function testReturnFalseIfWeDontHaveCoinsOfDenomination()
-    // {
-    //     $coinManager = $this->newTestedInstance;
-    //     $this->boolean($coinManager->any(1))->isFalse();
-    // }
+    public function testReturnFalseIfWeDontHaveCoinsOfDenomination()
+    {
+        $coinManager = $this->newTestedInstance;
+        $this->boolean($coinManager->any(1))->isFalse();
+    }
 
     public function testReturnNearChangeForSpecificAmount()
     {
