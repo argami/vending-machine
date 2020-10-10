@@ -38,7 +38,20 @@ class VendingMachine extends atoum
         $this->float($vm->InsertCoin(0.25))->isEqualTo(0.0);
         $this->float($vm->InsertCoin(2.1))->isEqualTo(2.1);
         $this->float($vm->InsertCoin(1))->isEqualTo(0.0);
-        $this->float($this->testedInstance->getInsertedAmount())
+        $this->float($vm->getInsertedAmount())
                ->isEqualTo(1.35);
+    }
+
+    public function testReturnCoinsShouldReturnTheAcceptedCoinsAndUpdateInsertedAmount()
+    {
+        $coins = [0.1, 0.25, 2.1, 1];
+        $vm = $this->newTestedInstance;
+
+        foreach ($coins as $coin) {
+            $vm->InsertCoin($coin);
+        }
+
+        $this->array($vm->returnCoins())->isEqualTo([0.1, 0.25, 1]);
+        $this->float($vm->getInsertedAmount())->isEqualTo(0.0);
     }
 }

@@ -23,4 +23,12 @@ class VendingMachine
 
         return $coin;
     }
+
+    public function returnCoins() : array
+    {
+        $ret = $this->inserted_coins;
+        $this->inserted_coins = [];
+       
+        return $ret;
+    }
 }
