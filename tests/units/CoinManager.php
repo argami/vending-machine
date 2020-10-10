@@ -21,4 +21,16 @@ class CoinManager extends atoum
         $coinManager = $this->newTestedInstance;
         $this->boolean($coinManager->isValid(2))->isFalse();
     }
+
+
+    public function testReturnChangeForSpecificAmount()
+    {
+        $coinManager = $this->newTestedInstance;
+        $this->array($coinManager->getChange(0.05))->isEqualTo([0.05]);
+        $this->array($coinManager->getChange(0.1))->isEqualTo([0.1]);
+        $this->array($coinManager->getChange(5))->isEqualTo([1, 1, 1, 1, 1]);
+        $this->array($coinManager->getChange(0.5))->isEqualTo([0.25, 0.25]);
+        // greedyness
+        $this->array($coinManager->getChange(0.08))->isEqualTo([0.05]);
+    }
 }
