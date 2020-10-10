@@ -6,6 +6,7 @@ class VendingMachine
 {
     private $coinManager = null;
     private $insertedCoins = [];
+    private $products = ['WATER' => 0.65, 'JUICE' => 1.00, 'SODA' => 1.50];
 
 
     public function __construct(CoinManager $coinManager)
@@ -36,5 +37,10 @@ class VendingMachine
         $this->insertedCoins = [];
        
         return $ret;
+    }
+
+    public function sellProduct(string $productCode) : array
+    {
+        return [$productCode, []];
     }
 }

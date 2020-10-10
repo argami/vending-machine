@@ -51,4 +51,12 @@ class VendingMachine extends atoum
         $this->array($vendingMachine->returnCoins())->isEqualTo([0.1, 0.25, 1]);
         $this->float($vendingMachine->getInsertedAmount())->isEqualTo(0.0);
     }
+
+    public function testSellProductWithExactMoneyShouldReturnProductAndNoChange()
+    {
+        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager());
+        $vendingMachine->insertCoin(1);
+
+        $this->array($vendingMachine->sellProduct('JUICE'))->isEqualTo(['JUICE', []]);
+    }
 }
