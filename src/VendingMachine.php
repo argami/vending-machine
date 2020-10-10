@@ -2,16 +2,21 @@
 
 namespace vending;
 
+const DEFAULT_PRODUCTS = ['WATER' => ['value' => 0.65, 'count' => 0],
+                        'JUICE' => ['value' => 1.00, 'count' => 0],
+                        'SODA' => ['value' => 1.50, 'count' => 0]];
+
 class VendingMachine
 {
     private $coinManager = null;
     private $insertedCoins = [];
-    private $products = ['WATER' => 0.65, 'JUICE' => 1.00, 'SODA' => 1.50];
+    private $products = null;
 
 
-    public function __construct(CoinManager $coinManager)
+    public function __construct(CoinManager $coinManager, array $products = null)
     {
         $this->coinManager = $coinManager;
+        $this->products = $products ?? DEFAULT_PRODUCTS;
     }
 
     public function getInsertedAmount() : float
@@ -41,7 +46,11 @@ class VendingMachine
 
     public function sellProduct(string $productCode) : array
     {
-        $productPrice = $this->products[strtoupper($productCode)];
+        if ($this->products[strtoupper($productCode)]['count'] == 0) {
+            throw new \Exception("Product $productCode not available", 11);
+        }
+
+        $productPrice = $this->products[strtoupper($productCode)]['value'];
         $changeAmount = $this->getInsertedAmount() - $productPrice;
         if ($changeAmount >= 0) {
             $change = $this->coinManager->getChange($changeAmount);

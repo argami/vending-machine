@@ -54,7 +54,10 @@ class VendingMachine extends atoum
 
     public function testSellProductWithExactMoneyShouldReturnProductAndNoChange()
     {
-        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager());
+        $vendingMachine = $this->newTestedInstance(
+            new \vending\CoinManager(),
+            ['JUICE' => ['value' => 1.00, 'count' => 1]]
+        );
         $vendingMachine->insertCoin(1);
 
         $this->array($vendingMachine->sellProduct('JUICE'))->isEqualTo(['JUICE', []]);
@@ -67,7 +70,7 @@ class VendingMachine extends atoum
             '0.25' => ['value' => 25, 'count' => 2],
             '1' => ['value' => 100, 'count' => 5]];
 
-        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager($coins));
+        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager($coins), ['SODA' => ['value' => 1.50, 'count' => 1]]);
         $vendingMachine->insertCoin(1);
         $vendingMachine->insertCoin(1);
 
@@ -76,16 +79,28 @@ class VendingMachine extends atoum
 
     public function testSellProductReturnProductAndNoChange()
     {
-        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager());
+        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager(), ['SODA' => ['value' => 1.50, 'count' => 1]]);
         $vendingMachine->insertCoin(1);
         $vendingMachine->insertCoin(1);
 
         $this->array($vendingMachine->sellProduct('SODA'))->isEqualTo(['SODA', []]);
     }
 
-    public function testFailSellingProductEnoughMoneyInserted()
+
+    public function testFailSellingIfProductNotAvailable()
     {
         $vendingMachine = $this->newTestedInstance(new \vending\CoinManager());
+        $this->exception(
+            function () use ($vendingMachine) {
+                $vendingMachine->sellProduct('SODA');
+            }
+        )->hasCode(11);
+    }
+
+
+    public function testFailSellingProductEnoughMoneyInserted()
+    {
+        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager(), ['SODA' => ['value' => 1.50, 'count' => 1]]);
         $this->exception(
             function () use ($vendingMachine) {
                 $vendingMachine->sellProduct('SODA');
