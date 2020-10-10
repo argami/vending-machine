@@ -25,10 +25,18 @@ class CoinManager extends atoum
 
     public function testReturnFalseIfWeDontHaveCoinsOfDenomination()
     {
-        $coinManager = $this->newTestedInstance;
+        $coin = ['0.05' => ['value' => 5, 'count' => 2]];
+        $coinManager = $this->newTestedInstance($coin);
         $this->boolean($coinManager->any(1))->isFalse();
     }
-
+    
+    public function testReturnTrueIfWeHaveCoinsOfDenomination()
+    {
+        $coin = ['0.05' => ['value' => 5, 'count' => 2]];
+        $coinManager = $this->newTestedInstance($coin);
+        $this->boolean($coinManager->any(0.05))->isTrue();
+    }
+    
     public function testReturnNearChangeForSpecificAmount()
     {
         $coins = ['0.05' => ['value' => 5, 'count' => 2],
