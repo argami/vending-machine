@@ -4,9 +4,15 @@ namespace vending;
 
 class VendingMachine
 {
-    private $valid_coin_denominations = [0.05, 0.10, 0.25, 1];
+    private $coin_manager = null;
     private $inserted_coins = [];
-    
+
+
+    public function __construct(CoinManager $coin_manager)
+    {
+        $this->coin_manager = $coin_manager;
+    }
+
     public function getInsertedAmount() : float
     {
         return array_sum($this->inserted_coins);
@@ -16,7 +22,7 @@ class VendingMachine
     # the amount coin
     public function InsertCoin(float $coin) : float
     {
-        if (in_array($coin, $this->valid_coin_denominations)) {
+        if ($this->coin_manager->isValid($coin)) {
             $this->inserted_coins[] = $coin;
             return 0.0;
         }
