@@ -4,26 +4,26 @@ namespace vending;
 
 class VendingMachine
 {
-    private $coin_manager = null;
-    private $inserted_coins = [];
+    private $coinManager = null;
+    private $insertedCoins = [];
 
 
-    public function __construct(CoinManager $coin_manager)
+    public function __construct(CoinManager $coinManager)
     {
-        $this->coin_manager = $coin_manager;
+        $this->coinManager = $coinManager;
     }
 
     public function getInsertedAmount() : float
     {
-        return array_sum($this->inserted_coins);
+        return array_sum($this->insertedCoins);
     }
 
     # if the denomination of the coin is invalid we return
     # the amount coin
-    public function InsertCoin(float $coin) : float
+    public function insertCoin(float $coin) : float
     {
-        if ($this->coin_manager->isValid($coin)) {
-            $this->inserted_coins[] = $coin;
+        if ($this->coinManager->isValid($coin)) {
+            $this->insertedCoins[] = $coin;
             return 0.0;
         }
 
@@ -32,8 +32,8 @@ class VendingMachine
 
     public function returnCoins() : array
     {
-        $ret = $this->inserted_coins;
-        $this->inserted_coins = [];
+        $ret = $this->insertedCoins;
+        $this->insertedCoins = [];
        
         return $ret;
     }
