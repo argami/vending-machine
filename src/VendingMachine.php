@@ -41,13 +41,13 @@ class VendingMachine
 
     public function sellProduct(string $productCode) : array
     {
-        $changeAmount = $this->getInsertedAmount() - $this->products[strtoupper($productCode)];
-        print_r($changeAmount);
+        $productPrice = $this->products[strtoupper($productCode)];
+        $changeAmount = $this->getInsertedAmount() - $productPrice;
         if ($changeAmount >= 0) {
             $change = $this->coinManager->getChange($changeAmount);
             // get product
             return [$productCode, $change];
         }
-        return [];
+        throw new \Exception("$productCode price: $productPrice. Add:".($changeAmount * -1), 10);
     }
 }

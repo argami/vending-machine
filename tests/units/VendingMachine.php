@@ -82,4 +82,14 @@ class VendingMachine extends atoum
 
         $this->array($vendingMachine->sellProduct('SODA'))->isEqualTo(['SODA', []]);
     }
+
+    public function testFailSellingProductEnoughMoneyInserted()
+    {
+        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager());
+        $this->exception(
+            function () use ($vendingMachine) {
+                $vendingMachine->sellProduct('SODA');
+            }
+        )->hasCode(10);
+    }
 }
