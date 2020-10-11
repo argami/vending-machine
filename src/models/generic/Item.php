@@ -25,14 +25,18 @@ class GenericItem implements \Ds\Hashable
         return $this->key === $obj->key;
     }
 
-    public function add(int $items)
+    public function add(int $items):int
     {
         $this->count += $items;
+
+        return $items;
     }
 
-    public function remove(int $items)
+    public function remove(int $items):int
     {
         $this->count -= $items;
+        
+        return $items;
     }
 
     public function getValue()

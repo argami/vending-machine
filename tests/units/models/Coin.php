@@ -26,4 +26,18 @@ class Coin extends atoum
         $this->boolean($item->equals($this->newTestedInstance(0.1)))->isTrue();
         $this->boolean($item->equals($this->newTestedInstance(1)))->isFalse();
     }
+
+    public function testReturnNearChangeForSpecificAmount()
+    {
+        $coins = [$this->newTestedInstance(0.05, 5),
+                  $this->newTestedInstance(0.1, 10),
+                  $this->newTestedInstance(0.25, 10),
+                  $this->newTestedInstance(1, 4)];
+
+        $this->array($coins[0]->getChange(0.20))->isEqualTo([0, [0.05, 0.05, 0.05, 0.05]]);
+        $this->array($coins[0]->getChange(0.08))->isEqualTo([0.03, [0.05]]);
+        $this->array($coins[1]->getChange(0.4))->isEqualTo([0, [0.1, 0.1, 0.1, 0.1]]);
+        $this->array($coins[2]->getChange(0.5))->isEqualTo([0, [0.25, 0.25]]);
+        $this->array($coins[3]->getChange(5))->isEqualTo([1, [1, 1, 1, 1]]);
+    }
 }
