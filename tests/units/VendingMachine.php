@@ -8,6 +8,7 @@ use vending\models\Coins;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class VendingMachine extends atoum
 {
