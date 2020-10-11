@@ -17,6 +17,7 @@ I think the code and git log will give a lot of insight of why/how i did X in th
 - When in a real VM i ask for an item without introducing money, will show the price of the item, there are some that if product is not available it will show it, but most of the one i used (old ones) it will wait to tell you the availability until you try to buy it. Here i will do what its mentioned at first.
 - Normally the insert coin pocket (as for the amounts of denomination coin inside of the VM) has a fixed quantity of coins that can hold (there are other VM that work in some other way, talking about the insert pocket but its out of the scope). In my case i set up no limit for the amount of coins that can be inserted or stored.
 - Some of the most newer VM allow to configure which Coins or Notes denominatiion are accepted.
+- Most of the VM goes to Service mode when the door is open, in this case i will prepare a command to go SERVICE and one to STOP SERVICE
 
 ## Things to take in consideration
 
@@ -24,17 +25,27 @@ I think the code and git log will give a lot of insight of why/how i did X in th
 - I have use PHPUnit for some time, but i dont really like the way the testing API is done, that is why i use atoum, which i found more expresive, and easy to understand at first look
 
 
-# TODO
+# Extras
+
+## TODO
 
 Setup a VendingMachine class with the basic funcionality I/O (Simple version to construct from) 
 
 - [x] Insert Coin
 - [x] Coin Validation
 - [x] Return money
-- [ ] Sell Items 
+- [x] Sell Items 
 - [ ] Need to improve coin name, using value (in float format) is fragile
-- [ ] Coins aren't infinite 
+- [x] Coins aren't infinite 
 - [ ] "CRUD" for items (coins, products)
+- [ ] Refactoring Coin/CoinSet from CoinManager
+- [ ] To avoid floating issues move all calculations to cents and denominations to string
+- [ ] Create exceptions classes and set a logic number system
 
 
 - [ ] Cleaning test
+
+
+## Doubts
+
+- Instead of the normal throwing error approach should i use a near json rest, way of returning error with the error key and the results?

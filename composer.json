@@ -14,6 +14,7 @@
     },
     "require-dev": {
         "ext-xdebug": "*",
+        "ext-ds": "*",
         "atoum/atoum": "^3.4",
         "atoum/stubs": "^2.6"
     },
