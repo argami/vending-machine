@@ -47,16 +47,10 @@ class VendingMachine
 
     public function sellProduct(string $productCode) : array
     {
-        $coins = [];
-        try {
-            $product = $this->checkout->sell($productCode, $this->insertedCoins);
-            $coins = $this->returnCoins();
-        } catch (\Exception $e) {
-            $product = $e->getMessage();
-        }
+        $product = $this->checkout->sell($productCode, $this->insertedCoins);
         
         # returning the change
         
-        return [$product,  $coins];
+        return [$product,  $this->returnCoins()];
     }
 }
