@@ -4,7 +4,7 @@ namespace vending\models;
 
 use vending\models\generic\GenericItem;
 
-final class Coin extends GenericItem
+class Coin extends GenericItem
 {
     private int $valueInCents = 0;
 

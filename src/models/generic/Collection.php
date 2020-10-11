@@ -9,11 +9,13 @@ class GenericCollection implements \IteratorAggregate
     public function __construct(\Ds\Hashable ...$items)
     {
         $this->items = new \Ds\Set($items);
+        $this->internalSort();
     }
 
     public function add(\Ds\Hashable ...$values) : void
     {
         $this->items->add(...$values);
+        $this->internalSort();
     }
     
     public function count() : int
@@ -33,6 +35,13 @@ class GenericCollection implements \IteratorAggregate
 
     public function getIterator()
     {
-        return new ArrayIterator($this->items);
+        return new \ArrayIterator($this->items->toArray());
+    }
+
+    private function internalSort()
+    {
+        $this->items->sort(function ($a, $b) {
+            return $b->getValue() <=> $a->getValue();
+        });
     }
 }

@@ -3,14 +3,26 @@
 namespace tests\units\vending;
 
 use atoum;
+use vending\models\Coin;
+use vending\models\Coins;
 
 class CoinManager extends atoum
 {
+    private $coins;
+
+    public function beforeTestMethod($method)
+    {
+        $this->coins = new Coins(...[new Coin(0.05, 2),
+                                new Coin(0.1, 1),
+                                new Coin(0.25, 2),
+                                new Coin(1, 5)]);
+    }
+    
     public function testReturnTrueIfCoinIsValidDenomination()
     {
-        $coinManager = $this->newTestedInstance;
+        $coinManager = $this->newTestedInstance($this->coins);
 
-        $this->boolean($coinManager->isValid(0.10))->isTrue();
+        $this->boolean($coinManager->isValid(0.1))->isTrue();
         $this->boolean($coinManager->isValid(1.0))->isTrue();
         $this->boolean($coinManager->isValid(0.05))->isTrue();
         $this->boolean($coinManager->isValid(0.25))->isTrue();
@@ -18,22 +30,24 @@ class CoinManager extends atoum
 
     public function testReturnFalseIfCoinIsInvalidDenomination()
     {
-        $coinManager = $this->newTestedInstance;
+        $coinManager = $this->newTestedInstance($this->coins);
         $this->boolean($coinManager->isValid(2))->isFalse();
     }
 
     public function testAddShouldUpdateTheCoinNumber()
     {
-        $coinManager = $this->newTestedInstance;
-        foreach (\vending\DEFAULT_COINS as $coin => $value) {
-            $this->boolean($coinManager->add($value['value']/100))->isTrue();
-            $this->array($coinManager->getCoin($value['value']/100))->integer['count']->isEqualTo(1);
-        }
+        $coinMock = new \mock\vending\models\Coin(1);
+        $coinsMock = new Coins($coinMock);
+        $coinManager = $this->newTestedInstance($coinsMock);
+
+        $this->if($coinManager->add(1))
+             ->then
+             ->mock($coinMock)->call('add')->once();
     }
 
     public function testAddThrowErrorOnInvalidCoin()
     {
-        $coinManager = $this->newTestedInstance;
+        $coinManager = $this->newTestedInstance(new Coins());
         $this->exception(
             function () use ($coinManager) {
                 $coinManager->add(0.50);
@@ -43,58 +57,23 @@ class CoinManager extends atoum
 
     public function testReturnFalseIfWeDontHaveCoinsOfDenomination()
     {
-        $coin = ['0.05' => ['value' => 5, 'count' => 2]];
-        $coinManager = $this->newTestedInstance($coin);
-        $this->boolean($coinManager->any(1))->isFalse();
+        $coinManager = $this->newTestedInstance($this->coins);
+        $this->boolean($coinManager->any(7))->isFalse();
     }
     
     public function testReturnTrueIfWeHaveCoinsOfDenomination()
     {
-        $coin = ['0.05' => ['value' => 5, 'count' => 2]];
-        $coinManager = $this->newTestedInstance($coin);
+        $coinManager = $this->newTestedInstance($this->coins);
         $this->boolean($coinManager->any(0.05))->isTrue();
     }
     
-    public function testReturnNearChangeForSpecificAmount()
+    public function testCoinsGetChangeItsCalled()
     {
-        $coins = ['0.05' => ['value' => 5, 'count' => 2],
-                  '0.1' => ['value' => 10, 'count' => 1],
-                  '0.25' => ['value' => 25, 'count' => 2],
-                  '1' => ['value' => 100, 'count' => 5]];
+        $coinMock = new \mock\vending\models\Coins;
+        $coinManager = $this->newTestedInstance($coinMock);
 
-        $coinManager = $this->newTestedInstance($coins);
-        $this->array($coinManager->getChange(0.05))->isEqualTo([0.05]);
-        $this->array($coinManager->getChange(0.1))->isEqualTo([0.1]);
-        $this->array($coinManager->getChange(5))->isEqualTo([1, 1, 1, 1, 1]);
-        $this->array($coinManager->getChange(0.5))->isEqualTo([0.25, 0.25]);
-        // greedyness
-        $this->array($coinManager->getChange(0.08))->isEqualTo([0.05]);
-    }
-
-    public function testCoinCountShouldDropToZero()
-    {
-        $coin = ['0.05' => ['value' => 5, 'count' => 2]];
-        $coinManager = $this->newTestedInstance($coin);
-        $this->array($coinManager->getChange(0.15))->isEqualTo([0.05, 0.05]);
-        $this->boolean($coinManager->any(0.05))->isFalse();
-        $this->array($coinManager->getCoin(0.05))->integer['count']->isEqualTo(0);
-    }
-
-    public function testTestingChangeAndCoinStock()
-    {
-        $coins = ['0.05' => ['value' => 5, 'count' => 10],
-            '0.1' => ['value' => 10, 'count' => 5],
-            '0.25' => ['value' => 25, 'count' => 4],
-            '1' => ['value' => 100, 'count' => 5]];
-
-        $coinManager = $this->newTestedInstance($coins);
-        $this->array($coinManager->getChange(0.50))->isEqualTo([0.25, 0.25]);
-        $this->array($coinManager->getChange(0.35))->isEqualTo([0.25, 0.10]);
-        $this->array($coinManager->getChange(3.35))->isEqualTo([1, 1, 1, 0.25, 0.10]);
-        $this->array($coinManager->getChange(0.25))->isEqualTo([0.10, 0.10, 0.05]);
-        $this->array($coinManager->getChange(2.35))->isEqualTo([1, 1, 0.10, 0.05, 0.05, 0.05, 0.05, 0.05]);
-        # greedy b. not returning all the money
-        $this->array($coinManager->getChange(1))->isEqualTo([0.05, 0.05, 0.05, 0.05]);
-        $this->array($coinManager->getChange(1))->isEqualTo([]);
+        $this->if($coinManager->getChange(1))
+             ->then
+             ->mock($coinMock)->call('getChange')->once();
     }
 }

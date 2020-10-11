@@ -18,7 +18,7 @@ class GenericCollection extends atoum
         $this->string($rItem->getValue())->isEqualTo('1');
         $this->integer($rItem->count())->isEqualTo(0);
 
-        $item3 = new GenericItem(2, 1, '2');
+        $item3 = new GenericItem(2, 1, '');
         $genericCollection->add($item3);
         $this->boolean($genericCollection->last()->equals($item3))->isTrue();
     }
