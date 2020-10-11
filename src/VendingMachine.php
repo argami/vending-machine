@@ -46,17 +46,32 @@ class VendingMachine
 
     public function sellProduct(string $productCode) : array
     {
-        if ($this->products[strtoupper($productCode)]['count'] == 0) {
+        $product = $this->products[strtoupper($productCode)];
+
+        if ($product['count'] == 0) {
             throw new \Exception("Product $productCode not available", 11);
         }
-
-        $productPrice = $this->products[strtoupper($productCode)]['value'];
+        $productPrice = $product['value'];
         $changeAmount = $this->getInsertedAmount() - $productPrice;
         if ($changeAmount >= 0) {
             $change = $this->coinManager->getChange($changeAmount);
-            // get product
+            
+            $this->productSold($productCode);
+            $this->paymentToVault();
+            
             return [$productCode, $change];
         }
         throw new \Exception("$productCode price: $productPrice. Add:".($changeAmount * -1), 10);
+    }
+
+    private function productSold(string $productCode)
+    {
+        $this->products[strtoupper($productCode)]['count'] -= 1;
+    }
+
+    private function paymentToVault()
+    {
+        $this->coinManager->add(...$this->insertedCoins);
+        $this->insertedCoins = [];
     }
 }

@@ -22,6 +22,24 @@ class CoinManager extends atoum
         $this->boolean($coinManager->isValid(2))->isFalse();
     }
 
+    public function testAddShouldUpdateTheCoinNumber()
+    {
+        $coinManager = $this->newTestedInstance;
+        foreach (\vending\DEFAULT_COINS as $coin => $value) {
+            $this->boolean($coinManager->add($value['value']/100))->isTrue();
+            $this->array($coinManager->getCoin($value['value']/100))->integer['count']->isEqualTo(1);
+        }
+    }
+
+    public function testAddThrowErrorOnInvalidCoin()
+    {
+        $coinManager = $this->newTestedInstance;
+        $this->exception(
+            function () use ($coinManager) {
+                $coinManager->add(0.50);
+            }
+        )->hasCode(50);
+    }
 
     public function testReturnFalseIfWeDontHaveCoinsOfDenomination()
     {

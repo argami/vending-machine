@@ -57,6 +57,21 @@ class CoinManager
         return $this->coinDrawers[(string)$coin];
     }
 
+    public function add(...$coins)
+    {
+        foreach ($coins as $coinCode) {
+            if (!$this->isValid($coinCode)) {
+                // In the vending machine coins should be validated on
+                // inserting we should never reach here
+                throw new \Exception("Invalid Coin", 50);
+            }
+
+            $this->coinDrawers[(string)$coinCode]['count'] += 1;
+        }
+
+        return true;
+    }
+
     private function sort()
     {
         uasort($this->coinDrawers, function ($left, $right) {

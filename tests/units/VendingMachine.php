@@ -61,6 +61,7 @@ class VendingMachine extends atoum
         $vendingMachine->insertCoin(1);
 
         $this->array($vendingMachine->sellProduct('JUICE'))->isEqualTo(['JUICE', []]);
+        $this->float($vendingMachine->getInsertedAmount())->isEqualTo(0.0);
     }
 
     public function testSellProductReturnProductAndChange()
@@ -68,13 +69,16 @@ class VendingMachine extends atoum
         $coins = ['0.05' => ['value' => 5, 'count' => 2],
             '0.1' => ['value' => 10, 'count' => 1],
             '0.25' => ['value' => 25, 'count' => 2],
-            '1' => ['value' => 100, 'count' => 5]];
+            '1' => ['value' => 100, 'count' => 0]];
 
-        $vendingMachine = $this->newTestedInstance(new \vending\CoinManager($coins), ['SODA' => ['value' => 1.50, 'count' => 1]]);
-        $vendingMachine->insertCoin(1);
-        $vendingMachine->insertCoin(1);
+        $coinManager = new \vending\CoinManager($coins);
+        $vendingMachine = $this->newTestedInstance($coinManager, ['SODA' => ['value' => 1.50, 'count' => 1]]);
+        $vendingMachine->insertCoin(1.0);
+        $vendingMachine->insertCoin(1.0);
 
         $this->array($vendingMachine->sellProduct('SODA'))->isEqualTo(['SODA', [0.25, 0.25]]);
+        $this->float($vendingMachine->getInsertedAmount())->isEqualTo(0.0);
+        $this->array($coinManager->getCoin(1))->integer['count']->isEqualTo(2);
     }
 
     public function testSellProductReturnProductAndNoChange()
@@ -84,27 +88,32 @@ class VendingMachine extends atoum
         $vendingMachine->insertCoin(1);
 
         $this->array($vendingMachine->sellProduct('SODA'))->isEqualTo(['SODA', []]);
+        $this->float($vendingMachine->getInsertedAmount())->isEqualTo(0.0);
     }
 
 
     public function testFailSellingIfProductNotAvailable()
     {
         $vendingMachine = $this->newTestedInstance(new \vending\CoinManager());
+        $vendingMachine->insertCoin(1);
         $this->exception(
             function () use ($vendingMachine) {
                 $vendingMachine->sellProduct('SODA');
             }
         )->hasCode(11);
+        $this->float($vendingMachine->getInsertedAmount())->isEqualTo(1.0);
     }
 
 
     public function testFailSellingProductEnoughMoneyInserted()
     {
         $vendingMachine = $this->newTestedInstance(new \vending\CoinManager(), ['SODA' => ['value' => 1.50, 'count' => 1]]);
+        $vendingMachine->insertCoin(0.25);
         $this->exception(
             function () use ($vendingMachine) {
                 $vendingMachine->sellProduct('SODA');
             }
         )->hasCode(10);
+        $this->float($vendingMachine->getInsertedAmount())->isEqualTo(0.25);
     }
 }
