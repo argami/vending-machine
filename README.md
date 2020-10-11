@@ -5,6 +5,13 @@ VendingMachine Kata
 
 Lets start with an simple version implementation and grow from it.
 
+# Requirements
+
+## Packages
+
+- ext-xdebug
+- ext-ds
+
 
 # Notes:
 
@@ -21,6 +28,7 @@ I think the code and git log will give a lot of insight of why/how i did X in th
 
 ## Things to take in consideration
 
+- I try at my best to not use packages, with the exception of Ds\* (Hashable, Set) that allows me to have a base collection/unique item implementation
 - Normally in large code bases i work using the git-flow approach but for small repos/projects, working alone and in the begin of the project i dont use it to remove the overhead of it, that is why in most of this project i didn't use it.
 - I have use PHPUnit for some time, but i dont really like the way the testing API is done, that is why i use atoum, which i found more expresive, and easy to understand at first look
 
@@ -41,6 +49,8 @@ Setup a VendingMachine class with the basic funcionality I/O (Simple version to 
 - [ ] Refactoring Coin/CoinSet from CoinManager
 - [ ] To avoid floating issues move all calculations to cents and denominations to string
 - [ ] Create exceptions classes and set a logic number system
+- [ ] Should Change Coin to somethning like Currency (maybe is not the best name for it?) to be more flexible in case of adding bank notes
+- [ ] update readme and try Ds\* pollyfills in case of not be posible to install the extension (https://github.com/php-ds)
 
 
 - [ ] Cleaning test
