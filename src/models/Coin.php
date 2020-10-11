@@ -23,7 +23,6 @@ class Coin extends GenericItem
     public function getChange(float $changeAmount):array
     {
         $remaining = $this->toCents($changeAmount);
-        $change = [];
         $ncoins = 0;
         if ($this->canChange($remaining)) {
             $ncoins = $this->removeMax($remaining  / $this->valueInCents);
