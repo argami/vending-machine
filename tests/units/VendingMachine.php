@@ -120,11 +120,7 @@ class VendingMachine extends atoum
     {
         $vendingMachine = $this->newTestedInstance($this->coinManager);
         $vendingMachine->insertCoin(1);
-        $this->exception(
-            function () use ($vendingMachine) {
-                $vendingMachine->sellProduct('SODA');
-            }
-        )->hasCode(11);
+        $this->exception(fn () => $vendingMachine->sellProduct('SODA'))->hasCode(11);
         $this->float($vendingMachine->getInsertedAmount())->isEqualTo(1.0);
     }
 
@@ -133,11 +129,7 @@ class VendingMachine extends atoum
     {
         $vendingMachine = $this->newTestedInstance($this->coinManager, ['SODA' => ['value' => 1.50, 'count' => 1]]);
         $vendingMachine->insertCoin(0.25);
-        $this->exception(
-            function () use ($vendingMachine) {
-                $vendingMachine->sellProduct('SODA');
-            }
-        )->hasCode(10);
+        $this->exception(fn () => $vendingMachine->sellProduct('SODA'))->hasCode(10);
         $this->float($vendingMachine->getInsertedAmount())->isEqualTo(0.25);
     }
 }

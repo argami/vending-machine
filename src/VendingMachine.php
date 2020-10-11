@@ -6,6 +6,8 @@ const DEFAULT_PRODUCTS = ['WATER' => ['value' => 0.65, 'count' => 0],
                         'JUICE' => ['value' => 1.00, 'count' => 0],
                         'SODA' => ['value' => 1.50, 'count' => 0]];
 
+use vending\models\Products;
+
 class VendingMachine
 {
     private $coinManager = null;

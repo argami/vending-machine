@@ -48,11 +48,7 @@ class CoinManager extends atoum
     public function testAddThrowErrorOnInvalidCoin()
     {
         $coinManager = $this->newTestedInstance(new Coins());
-        $this->exception(
-            function () use ($coinManager) {
-                $coinManager->add(0.50);
-            }
-        )->hasCode(50);
+        $this->exception(fn () => $coinManager->add(0.50))->hasCode(50);
     }
 
     public function testReturnFalseIfWeDontHaveCoinsOfDenomination()

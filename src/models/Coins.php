@@ -27,9 +27,9 @@ class Coins extends GenericCollection implements Changeable
 
     public function findByValue(float $value)
     {
-        $found = $this->items->filter(function ($coin) use ($value) {
-            return $coin->getValue() == $value;
-        });
+        $found = $this->items->filter(
+            fn ($coin) => $coin->getValue() == $value
+        );
         
         return $found->isEmpty() ? null : $found->first();
     }
