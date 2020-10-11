@@ -44,4 +44,13 @@ class GenericCollection implements \IteratorAggregate
             return $b->getValue() <=> $a->getValue();
         });
     }
+
+    public function find($value)
+    {
+        $found = $this->items->filter(
+            fn ($item) => $item->hash() == strtoupper($value)
+        );
+        
+        return $found->isEmpty() ? null : $found->first();
+    }
 }

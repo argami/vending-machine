@@ -48,4 +48,9 @@ class GenericItem implements \Ds\Hashable
     {
         return $this->count;
     }
+
+    public function any(): bool
+    {
+        return $this->count() > 0;
+    }
 }

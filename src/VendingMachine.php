@@ -70,10 +70,4 @@ class VendingMachine
     {
         $this->products[strtoupper($productCode)]['count'] -= 1;
     }
-
-    private function paymentToVault()
-    {
-        $this->coinManager->add(...$this->insertedCoins);
-        $this->insertedCoins = [];
-    }
 }
