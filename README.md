@@ -5,6 +5,12 @@ VendingMachine Kata
 
 Lets start with an simple version implementation and grow from it.
 
+# How To run it
+
+```bash
+php src/prompt.php
+```
+
 # Requirements
 
 ## Packages
