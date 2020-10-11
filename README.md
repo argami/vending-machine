@@ -11,12 +11,20 @@ Lets start with an simple version implementation and grow from it.
 php src/prompt.php
 ```
 
+
+___With Docker ___
+
+```bash
+docker run --rm -ti -v $(pwd):/app -w /app composer:latest /app/scripts/run_in_docker.sh
+```
+
 # Requirements
 
 ## Packages
 
 - ext-xdebug
 - ext-ds
+- php 7.4
 
 
 # Notes:
