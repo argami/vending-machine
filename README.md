@@ -46,15 +46,36 @@ Setup a VendingMachine class with the basic funcionality I/O (Simple version to 
 - [ ] Need to improve coin name, using value (in float format) is fragile
 - [x] Coins aren't infinite 
 - [ ] "CRUD" for items (coins, products)
-- [ ] Refactoring Coin/CoinSet from CoinManager
+- [x] Refactoring Coin/CoinSet from CoinManager
 - [ ] To avoid floating issues move all calculations to cents and denominations to string
 - [ ] Create exceptions classes and set a logic number system
 - [ ] Should Change Coin to somethning like Currency (maybe is not the best name for it?) to be more flexible in case of adding bank notes
 - [ ] update readme and try Ds\* pollyfills in case of not be posible to install the extension (https://github.com/php-ds)
+- [ ] Move code to a lib folder
+- [ ] Because of the internal ordering the tests are right now fragile i need to change that on the tests
+
+### service status
+
+- [ ] set service status
+- [ ] status can't sell products
+- [ ] should be able to change coins amounts/denominations (add, remove, update)
+- [ ] should be able to change products (add, remove, update) 
+- [ ] get log of work? and reset log
+
+- [ ] Cleaning tests
 
 
-- [ ] Cleaning test
+### Interfaces
 
+#### Terminal UI
+
+#### Terminal UI2
+
+#### Terminal Rest/HTML
+
+### Extras
+
+- [ ] be able to set a tests in file with multiline action to tests commands (terminal interfaces mainly/ and underlying lib)
 
 ## Doubts
 
