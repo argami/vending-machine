@@ -2,10 +2,6 @@
 
 namespace vending;
 
-const DEFAULT_PRODUCTS = ['WATER' => ['value' => 0.65, 'count' => 0],
-                        'JUICE' => ['value' => 1.00, 'count' => 0],
-                        'SODA' => ['value' => 1.50, 'count' => 0]];
-
 use vending\models\Products;
 use vending\Checkout;
 
@@ -51,10 +47,16 @@ class VendingMachine
 
     public function sellProduct(string $productCode) : array
     {
-        $product = $this->checkout->sell($productCode, $this->insertedCoins);
+        $coins = [];
+        try {
+            $product = $this->checkout->sell($productCode, $this->insertedCoins);
+            $coins = $this->returnCoins();
+        } catch (\Exception $e) {
+            $product = $e->getMessage();
+        }
         
         # returning the change
         
-        return [$product,  $this->returnCoins()];
+        return [$product,  $coins];
     }
 }

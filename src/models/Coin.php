@@ -53,6 +53,6 @@ class Coin extends GenericItem
     
     private function removeMax($ncoins): int
     {
-        return $this->remove($ncoins > $this->count() ? $this->count() : $ncoins);
+        return $this->remove($ncoins > $this->count() ? $this->count() : (int)$ncoins);
     }
 }

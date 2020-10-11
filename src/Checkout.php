@@ -29,7 +29,7 @@ class Checkout
             
             return $productCode;
         }
-        throw new \Exception("$productCode price: {$product->getValue()}. Add:".($changeAmount * -1), 10);
+        throw new \Exception("Not enough coins inserted $productCode price: {$product->getValue()}. add:".($changeAmount * -1), 10);
     }
 
     private function canSell($product):bool
