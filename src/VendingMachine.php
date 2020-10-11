@@ -7,18 +7,21 @@ const DEFAULT_PRODUCTS = ['WATER' => ['value' => 0.65, 'count' => 0],
                         'SODA' => ['value' => 1.50, 'count' => 0]];
 
 use vending\models\Products;
+use vending\Checkout;
 
 class VendingMachine
 {
     private $coinManager = null;
     private $insertedCoins = [];
     private $products = null;
+    private $checkout;
 
 
-    public function __construct(CoinManager $coinManager, array $products = null)
+    public function __construct(CoinManager $coinManager, Products $products)
     {
         $this->coinManager = $coinManager;
-        $this->products = $products ?? DEFAULT_PRODUCTS;
+        $this->products = $products;
+        $this->checkout = new Checkout($coinManager, $products);
     }
 
     public function getInsertedAmount() : float
@@ -48,26 +51,10 @@ class VendingMachine
 
     public function sellProduct(string $productCode) : array
     {
-        $product = $this->products[strtoupper($productCode)];
-
-        if ($product['count'] == 0) {
-            throw new \Exception("Product $productCode not available", 11);
-        }
-        $productPrice = $product['value'];
-        $changeAmount = $this->getInsertedAmount() - $productPrice;
-        if ($changeAmount >= 0) {
-            $change = $this->coinManager->getChange($changeAmount);
-            
-            $this->productSold($productCode);
-            $this->paymentToVault();
-            
-            return [$productCode, $change];
-        }
-        throw new \Exception("$productCode price: $productPrice. Add:".($changeAmount * -1), 10);
-    }
-
-    private function productSold(string $productCode)
-    {
-        $this->products[strtoupper($productCode)]['count'] -= 1;
+        $product = $this->checkout->sell($productCode, $this->insertedCoins);
+        
+        # returning the change
+        
+        return [$product,  $this->returnCoins()];
     }
 }

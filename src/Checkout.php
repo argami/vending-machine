@@ -2,7 +2,6 @@
 
 namespace vending;
 
-use vending\CoinManager;
 use vending\models\Products;
 
 class Checkout
