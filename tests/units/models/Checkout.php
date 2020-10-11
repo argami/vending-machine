@@ -53,9 +53,7 @@ class Checkout extends atoum
                                 new Coin(1, 0)]);
         $coinManager = new \vending\CoinManager($coins);
 
-        $checkout = $this->newTestedInstance($this->coinManager, $this->products);
-
-        $products = new Products(new Product('SODA', 1.50, 1));
+        $checkout = $this->newTestedInstance($coinManager, $this->products);
 
         $insertedMoney = [1.0, 1.0];
 
