@@ -15,7 +15,7 @@ php src/prompt.php
 ___With Docker ___
 
 ```bash
-docker run --rm -ti -v $(pwd):/app -w /app composer:latest /app/scripts/run_in_docker.sh
+docker run --rm -ti -v $(pwd):/app -w /app composer:latest /app/scripts/vending_machine.sh
 ```
 
 # Requirements
