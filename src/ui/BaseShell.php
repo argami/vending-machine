@@ -23,8 +23,8 @@ class BaseShell
         $this->consoleOutput->writeln($this->header());
 
         while ($this->running) {
-            $this->consoleOutput->write($this->prompt());
-            $line = readline();
+            // $this->consoleOutput->write();
+            $line = readline($this->prompt());
             $commands = $this->parse($line);
             $this->processCommands(...$commands);
         }
