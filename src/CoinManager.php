@@ -51,4 +51,9 @@ class CoinManager
 
         return true;
     }
+
+    public function getCoins()
+    {
+        return $this->coinDrawers;
+    }
 }

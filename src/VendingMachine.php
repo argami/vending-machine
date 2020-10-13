@@ -11,6 +11,7 @@ class VendingMachine
     private $insertedCoins = [];
     private $products = null;
     private $checkout;
+    private $service = false;
 
 
     public function __construct(CoinManager $coinManager, Products $products)
@@ -52,5 +53,25 @@ class VendingMachine
         # returning the change
         
         return [$product,  $this->returnCoins()];
+    }
+
+    public function setService(bool $status)
+    {
+        $this->service = $status;
+    }
+
+    public function inService(): bool
+    {
+        return $this->service;
+    }
+
+    public function getCoinManager()
+    {
+        return $this->coinManager;
+    }
+
+    public function getProducts()
+    {
+        return $this->products;
     }
 }

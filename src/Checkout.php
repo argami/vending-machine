@@ -18,7 +18,7 @@ class Checkout
     public function sell(string $productCode, array &$money)
     {
         $product = $this->products->find($productCode);
-        if (!$product->any()) {
+        if ($product == null || !$product->any()) {
             throw new \Exception("Product $productCode not available", 11);
         }
 
