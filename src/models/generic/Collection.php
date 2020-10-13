@@ -38,6 +38,11 @@ class GenericCollection implements \IteratorAggregate
         return new \ArrayIterator($this->items->toArray());
     }
 
+    public function toArray()
+    {
+        return $this->items->toArray();
+    }
+
     private function internalSort()
     {
         $this->items->sort(function ($a, $b) {

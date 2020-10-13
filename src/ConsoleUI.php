@@ -9,20 +9,22 @@ use vending\models\Coin;
 use vending\models\Coins;
 use vending\models\Product;
 use vending\models\Products;
+use vending\ui\BaseCommand;
 
 class ConsoleUI
 {
     private $coinManager;
     private $products;
     private $vendingMachine;
-    private $commands = ['RETURN-COIN', 'GET-'];
-    
+   
     public function start()
     {
+        echo "\n";
+        $this->productsHeader();
         while (true) {
             $line = readline($this->status());
             $commands = $this->parse($line);
-            echo ' -> ' . $this->execute(...$commands) . PHP_EOL . PHP_EOL;
+            $this->processCommands(...$commands);
         }
     }
 
@@ -32,61 +34,67 @@ class ConsoleUI
         return " $insertedAmount$ >";
     }
 
-    public function parse($line): array
+    public function productsHeader()
     {
-        $sanitized = str_replace(' ', '', $line);
-        return explode(',', $sanitized);
+        $productHeader = array_reduce(
+            $this->products->toArray(),
+            function ($initial, $product) {
+                return $initial .= " ".$product->hash()."(".$product->count()."): ".(string)$product->getValue();
+            },
+            ''
+        );
+        
+        echo ' PRODUCTS: '.$productHeader . PHP_EOL;
     }
 
-    public function execute(...$commands):string
+    public function parse($line): array
     {
-        $result = [];
-        $invalidCoins = [];
-        foreach ($commands as $command) {
-            $command = strtoupper($command);
-            $spltCommand = explode('-', $command);
+        $sanitized = trim(str_replace('  ', ' ', $line));
+        $commands = [];
+        foreach (explode(',', $sanitized) as $part) {
+            $commands[] = trim(str_replace('-', ' ', $part));
+        }
+        return $commands;
+    }
 
-            switch ($spltCommand[0]) {
-                case 'GET':
-                        try {
-                            list($product, $coins) = $this->vendingMachine->sellProduct($spltCommand[1]);
-                        } catch (\Exception $e) {
-                            return $e->getMessage();
-                        }
-                        return "SOLD $product RETURN: ".implode(', ', $coins);
-                    break;
-                case 'RETURN':
-                    if ($command == 'RETURN-COIN') {
-                        return "RETURN: ". implode(', ', $this->vendingMachine->returnCoins());
-                    }
-                    break;
-                default:
-                    
-              }
-
-
-
-            $fltValue = floatval($command);
-
+    private function processCommands(...$commands)
+    {
+        foreach ($commands as $fullCommand) {
+            $args = explode(' ', $fullCommand);
+            $command = array_shift($args);
             
-            if ($fltValue != 0) {
-                if ($fltValue < 0) {
-                    // no negative money in coins
-                    $fltValue *= -1;
+            if ($command) {
+                $command = ucfirst(strtolower($command));
+                if (is_numeric($command)) {
+                    $args = [$command];
+                    $command = 'AddCoin';
                 }
-                $invalid = $this->vendingMachine->insertCoin($fltValue);
-                if ($invalid != 0) {
-                    $invalidCoins[] = $invalid;
-                }
-                continue;
+                $this->execute($command, ...$args);
             }
         }
+    }
 
-        if (count($invalidCoins) > 0) {
-            $result[] = "RETURN INVALID COINS: ".implode(', ', $invalidCoins);
+    private function execute($command, ...$args):string
+    {
+        $commandInstance = $this->initializeCommand($command);
+        if ($commandInstance) {
+            $result = $commandInstance->execute(...$args);
+            if (!empty($result)) {
+                echo ' -> ' . $result . PHP_EOL . PHP_EOL;
+            }
         }
-
-        return implode(', ', $result);
+        return "Error on introduced request";
+    }
+    
+    
+    private function initializeCommand(string $command)
+    {
+        try {
+            $class = new \ReflectionClass('vending\ui\\'.ucfirst($command).'Command');
+            return $class->newInstanceArgs([$this->vendingMachine]);
+        } catch (\ReflectionException $e) {
+            return false;
+        }
     }
 
     public function setDefaultValues()
