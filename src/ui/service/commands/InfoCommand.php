@@ -18,12 +18,12 @@ class InfoCommand extends BaseCommand
         $productHeader = array_reduce(
             $this->vendingMachine->getProducts()->toArray(),
             function ($initial, $product) {
-                return $initial .= " ".$product->hash()."(".$product->count()."): ".(string)$product->getValue()."\t";
+                return $initial .= str_pad(" ".$product->hash().": ".$product->count()."\t", 15, ' ', STR_PAD_LEFT);
             },
             ''
         );
         
-        $this->consoleOutput->writeln(' PRODUCTS: '.$productHeader);
+        $this->consoleOutput->writeln(" PRODUCTS: $productHeader");
     }
 
     public function getCoinsInfo()
@@ -31,11 +31,11 @@ class InfoCommand extends BaseCommand
         $coinsHeader = array_reduce(
             $this->vendingMachine->getCoinManager()->getCoins()->toArray(),
             function ($initial, $coin) {
-                return $initial .= " ".(string)$coin->getValue()."(".$coin->count().")\t";
+                return $initial .= str_pad(" ".(string)$coin->getValue().": ".$coin->count()."\t", 15, ' ', STR_PAD_LEFT);
             },
             ''
         );
         
-        $this->consoleOutput->writeln(' COINS: '.$coinsHeader);
+        $this->consoleOutput->writeln("    COINS: $coinsHeader");
     }
 }
