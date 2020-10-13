@@ -9,6 +9,7 @@ class BaseShell
 {
     protected $vendingMachine;
     protected $consoleOutput;
+    protected $running = true;
 
     public function __construct(\vending\VendingMachine $vendingMachine)
     {
@@ -21,7 +22,7 @@ class BaseShell
         $this->consoleOutput->writeln('');
         $this->consoleOutput->writeln($this->header());
 
-        while (true) {
+        while ($this->running) {
             $this->consoleOutput->write($this->prompt());
             $line = readline();
             $commands = $this->parse($line);
@@ -34,7 +35,7 @@ class BaseShell
         return ">";
     }
 
-    public function parse($line): array
+    protected function parse($line): array
     {
         $sanitized = trim(str_replace('  ', ' ', $line));
         $commands = [];
@@ -44,12 +45,17 @@ class BaseShell
         return $commands;
     }
 
-    private function processCommands(...$commands)
+    protected function processCommands(...$commands)
     {
         foreach ($commands as $fullCommand) {
             $args = explode(' ', $fullCommand);
             $command = array_shift($args);
             
+            if (strtoupper($command) == 'EXIT') {
+                $this->running = false;
+                return;
+            }
+
             if ($command) {
                 $command = ucfirst(strtolower($command));
                 if (is_numeric($command)) {
@@ -61,12 +67,11 @@ class BaseShell
         }
     }
 
-    private function execute($command, ...$args)
+    protected function execute($command, ...$args)
     {
         $commandInstance = $this->initializeCommand($command);
         if ($commandInstance) {
             $result = $commandInstance->execute(...$args);
-            // print_r([empty($result)]);
             if (!empty($result)) {
                 $this->consoleOutput->writeln(' -> ' . $result . PHP_EOL);
             }
@@ -74,7 +79,7 @@ class BaseShell
     }
     
     
-    private function initializeCommand(string $command)
+    protected function initializeCommand(string $command)
     {
         try {
             $class = new \ReflectionClass("vending\\ui\\commands\\{$command}Command");
