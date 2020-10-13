@@ -13,6 +13,6 @@ class AddCoinCommand extends BaseCommand
             }
         }
         #we should throw error
-        return '';
+        return "";
     }
 }
