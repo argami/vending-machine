@@ -10,20 +10,26 @@ use vending\models\Coins;
 use vending\models\Product;
 use vending\models\Products;
 use vending\ui\BaseCommand;
+use vending\ui\output\ConsoleOutput;
 
-class ConsoleUI
+final class ConsoleUI
 {
     private $coinManager;
     private $products;
     private $vendingMachine;
+    private $consoleOutput;
+
+    public function __construct()
+    {
+        $this->consoleOutput = new ConsoleOutput();
+    }
    
     public function start()
     {
-        echo "\n";
+        $this->consoleOutput->writeln('');
         $this->productsHeader();
         while (true) {
-            // fwrite(STDOUT, $this->status());
-            print($this->status());
+            $this->consoleOutput->write($this->status());
             $line = readline();
             $commands = $this->parse($line);
             $this->processCommands(...$commands);
@@ -46,7 +52,7 @@ class ConsoleUI
             ''
         );
         
-        echo ' PRODUCTS: '.$productHeader . PHP_EOL;
+        $this->consoleOutput->writeln(' PRODUCTS: '.$productHeader);
     }
 
     public function parse($line): array
@@ -82,7 +88,7 @@ class ConsoleUI
         if ($commandInstance) {
             $result = $commandInstance->execute(...$args);
             if (!empty($result)) {
-                echo ' -> ' . $result . PHP_EOL . PHP_EOL;
+                $this->consoleOutput->writeln(' -> ' . $result . PHP_EOL);
             }
         }
         return "Error on introduced request";
@@ -93,7 +99,7 @@ class ConsoleUI
     {
         try {
             $class = new \ReflectionClass('vending\ui\commands\\'.ucfirst($command).'Command');
-            return $class->newInstanceArgs([$this->vendingMachine]);
+            return $class->newInstanceArgs([$this->vendingMachine, $this->consoleOutput]);
         } catch (\ReflectionException $e) {
             return false;
         }

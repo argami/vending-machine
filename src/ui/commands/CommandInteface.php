@@ -3,9 +3,10 @@
 namespace vending\ui\commands;
 
 use vending\VendingMachine;
+use vending\ui\output\OutputInterface;
 
 interface CommandInterface
 {
-    public function __construct(\vending\VendingMachine $vendingMachine);
+    public function __construct(VendingMachine $vendingMachine, OutputInterface $consoleOutput);
     public function execute(...$args):string;
 }
