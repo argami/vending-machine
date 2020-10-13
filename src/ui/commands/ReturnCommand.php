@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace vending\ui;
+namespace vending\ui\commands;
 
 class ReturnCommand extends BaseCommand
 {

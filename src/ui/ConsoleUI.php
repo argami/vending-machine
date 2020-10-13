@@ -22,7 +22,9 @@ class ConsoleUI
         echo "\n";
         $this->productsHeader();
         while (true) {
-            $line = readline($this->status());
+            // fwrite(STDOUT, $this->status());
+            print($this->status());
+            $line = readline();
             $commands = $this->parse($line);
             $this->processCommands(...$commands);
         }
@@ -90,7 +92,7 @@ class ConsoleUI
     private function initializeCommand(string $command)
     {
         try {
-            $class = new \ReflectionClass('vending\ui\\'.ucfirst($command).'Command');
+            $class = new \ReflectionClass('vending\ui\commands\\'.ucfirst($command).'Command');
             return $class->newInstanceArgs([$this->vendingMachine]);
         } catch (\ReflectionException $e) {
             return false;
