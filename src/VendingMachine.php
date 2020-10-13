@@ -64,4 +64,14 @@ class VendingMachine
     {
         return $this->service;
     }
+
+    public function getCoinManager()
+    {
+        return $this->coinManager;
+    }
+
+    public function getProducts()
+    {
+        return $this->products;
+    }
 }

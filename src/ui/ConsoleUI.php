@@ -2,26 +2,18 @@
 
 namespace vending\ui;
 
-use vending\Checkout;
-use vending\CoinManager;
-use vending\VendingMachine;
-use vending\models\Coin;
-use vending\models\Coins;
-use vending\models\Product;
-use vending\models\Products;
 use vending\ui\BaseCommand;
 use vending\ui\output\ConsoleOutput;
 
 final class ConsoleUI
 {
-    private $coinManager;
-    private $products;
     private $vendingMachine;
     private $consoleOutput;
 
-    public function __construct()
+    public function __construct(\vending\VendingMachine $vendingMachine)
     {
         $this->consoleOutput = new ConsoleOutput();
+        $this->vendingMachine = $vendingMachine;
     }
    
     public function start()
@@ -36,7 +28,7 @@ final class ConsoleUI
         }
     }
 
-    public function status():string
+    public function prompt():string
     {
         $insertedAmount = number_format($this->vendingMachine->getInsertedAmount(), 2, '.', ',');
         return " $insertedAmount$ >";
@@ -45,7 +37,7 @@ final class ConsoleUI
     public function productsHeader()
     {
         $productHeader = array_reduce(
-            $this->products->toArray(),
+            $this->vendingMachine->getProducts()->toArray(),
             function ($initial, $product) {
                 return $initial .= " ".$product->hash()."(".$product->count()."): ".(string)$product->getValue();
             },
@@ -103,25 +95,5 @@ final class ConsoleUI
         } catch (\ReflectionException $e) {
             return false;
         }
-    }
-
-    public function setDefaultValues()
-    {
-        $this->coinManager = new CoinManager(
-            new Coins(
-                new Coin(0.05, 10),
-                new Coin(0.1, 10),
-                new Coin(0.25, 10),
-                new Coin(1, 10)
-            )
-        );
-
-        $this->products = new Products(
-            new Product('WATER', 0.65, 10),
-            new Product('JUICE', 1.00, 10),
-            new Product('SODA', 1.50, 10)
-        );
-
-        $this->vendingMachine = new VendingMachine($this->coinManager, $this->products);
     }
 }
