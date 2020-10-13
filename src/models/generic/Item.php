@@ -53,4 +53,9 @@ class GenericItem implements \Ds\Hashable
     {
         return $this->count() > 0;
     }
+
+    public function updateCount(int $count)
+    {
+        $this->count = $count;
+    }
 }
