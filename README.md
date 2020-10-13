@@ -11,8 +11,7 @@ Lets start with an simple version implementation and grow from it.
 php src/prompt.php
 ```
 
-
-___With Docker ___
+***With Docker***
 
 ```bash
 docker run --rm -ti -v $(pwd):/app -w /app composer:latest /app/scripts/run_in_docker.sh
@@ -46,6 +45,13 @@ I think the code and git log will give a lot of insight of why/how i did X in th
 - Normally in large code bases i work using the git-flow approach but for small repos/projects, working alone and in the begin of the project i dont use it to remove the overhead of it, that is why in most of this project i didn't use it.
 - I have use PHPUnit for some time, but i dont really like the way the testing API is done, that is why i use atoum, which i found more expresive, and easy to understand at first look
 
+# Info
+
+The SERVICE option has been implemented as a different shell with its own commands the commands so far are
+
+- Info
+- exit
+
 
 # Extras
 
@@ -77,7 +83,6 @@ Setup a VendingMachine class with the basic funcionality I/O (Simple version to 
 - [ ] get log of work? and reset log
 
 - [ ] Cleaning tests
-
 
 ### Interfaces
 
